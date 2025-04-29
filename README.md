@@ -39,7 +39,6 @@ geo-contacts/
 ├── docker-compose.yml
 ├── Makefile
 └── README.md
-
 ```
 
 ## Funcionalidades (em desenvolvimento)
