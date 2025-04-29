@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Validate composer.json
+        run: composer validate
+
+      - name: Install dependencies
+        run: composer install --no-progress --no-suggest --prefer-dist
+        working-directory: ./backend
+
+      - name: Run PHPStan (ou Pint)
+        run: ./vendor/bin/pint --test
+        working-directory: ./backend
+        continue-on-error: true
+
+      - name: Run PHPUnit
+        run: ./vendor/bin/phpunit
+        working-directory: ./backend
+        continue-on-error: true
