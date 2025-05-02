@@ -84,4 +84,33 @@ class EloquentContactRepository implements ContactRepositoryInterface
     {
         ContactModel::where('id', $contact->getId())->delete();
     }
+
+    public function search(int $userId, ?string $query = null): array
+    {
+        $queryBuilder = ContactModel::query()
+            ->where('user_id', $userId)
+            ->orderBy('name', 'asc');
+
+        if ($query) {
+            $queryBuilder->where(function ($q) use ($query) {
+                $q->where('name', 'like', "%$query%")
+                    ->orWhere('cpf', 'like', "%$query%");
+            });
+        }
+
+        $models = $queryBuilder->paginate(10);
+
+        return $models->map(function (ContactModel $model) {
+            return new Contact(
+                id: $model->id,
+                userId: $model->user_id,
+                name: $model->name,
+                cpf: new CPF($model->cpf),
+                phone: $model->phone,
+                address: $model->address,
+                latitude: $model->latitude !== null ? (float) $model->latitude : null,
+                longitude: $model->longitude !== null ? (float) $model->longitude : null,
+            );
+        })->toArray();
+    }
 }

@@ -10,6 +10,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/contacts', [ContactController::class, 'store']);
+    Route::get('/contacts', [ContactController::class, 'index']);
 });
 
 require __DIR__.'/auth.php';

@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace App\Infrastructure\Http\Controllers;
 
 use App\Application\UseCases\CreateContactUseCase;
+use App\Application\UseCases\ListContactsUseCase;
+use App\Infrastructure\Http\Requests\ListContactsRequest;
 use App\Infrastructure\Http\Requests\StoreContactRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
-class ContactController
+readonly class ContactController
 {
     public function __construct(
-        private readonly CreateContactUseCase $createContactUseCase
+        private CreateContactUseCase $createContactUseCase
     ) {}
 
     public function store(StoreContactRequest $request): JsonResponse
@@ -42,5 +44,21 @@ class ContactController
                 'longitude' => $contact->getLongitude(),
             ],
         ], 201);
+    }
+
+    public function index(ListContactsRequest $request, ListContactsUseCase $useCase): JsonResponse
+    {
+        $user = Auth::user();
+
+        $contacts = $useCase->execute(
+            userId: $user->id,
+            query: $request->string('q')->toString()
+        );
+
+        return response()->json([
+            'code' => 200,
+            'message' => 'Contacts fetched successfully',
+            'details' => $contacts,
+        ]);
     }
 }
