@@ -8,7 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -19,7 +20,9 @@ class AuthenticatedSessionController extends Controller
             'password' => 'required|string',
         ]);
 
-        if (! Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+        $user = User::where('email', $request->email)->first();
+
+        if (! $user || ! Hash::check($request->password, $user->password)) {
             return response()->json([
                 'code' => 401,
                 'message' => 'Invalid credentials',
@@ -27,25 +30,23 @@ class AuthenticatedSessionController extends Controller
             ], 401);
         }
 
-        $request->session()->regenerate();
+        $token = $user->createToken('api')->plainTextToken;
 
         return response()->json([
             'code' => 200,
             'message' => 'Login successful',
             'details' => [
-                'id' => $request->user()->id,
-                'name' => $request->user()->name,
-                'email' => $request->user()->email,
-            ]
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'token' => $token,
+            ],
         ]);
     }
 
     public function destroy(Request $request): JsonResponse
     {
-        Auth::guard('web')->logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        $request->user()->currentAccessToken()->delete();
 
         return response()->json([
             'code' => 200,
