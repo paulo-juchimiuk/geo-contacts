@@ -12,6 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->prependToGroup('api', \Modules\Shared\Infrastructure\Adapter\In\Http\Middleware\ForceJsonResponse::class);
         $middleware->api(prepend:[
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
@@ -19,18 +20,18 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->web([
-            \App\Http\Middleware\EncryptCookies::class,
+            \Modules\Shared\Infrastructure\Adapter\In\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \App\Http\Middleware\VerifyCsrfToken::class,
+            \Modules\Shared\Infrastructure\Adapter\In\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ]);
 
         $middleware->alias([
             'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
-            'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-            'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
+            'guest' => \App\Modules\Auth\Infrastructure\Adapter\In\Http\Middleware\RedirectIfAuthenticated::class,
+            'verified' => \App\Modules\Auth\Infrastructure\Adapter\In\Http\Middleware\EnsureEmailIsVerified::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Domain\Repositories\ContactRepositoryInterface;
-use App\Infrastructure\Persistence\EloquentContactRepository;
+use App\Modules\Contact\Domain\Repositories\ContactRepositoryInterface;
+use App\Modules\Contact\Infrastructure\Adapter\Out\Persistence\EloquentContactRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
