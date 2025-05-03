@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Modules\Contact\Domain\Repositories;
+namespace Modules\Contact\Domain\Repositories;
 
-use App\Modules\Contact\Domain\Entities\Contact;
+use Modules\Contact\Domain\Entities\Contact;
 
 interface ContactRepositoryInterface
 {

@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Modules\Auth\Infrastructure\Adapter\Out\Persistence\EloquentModels;
+declare(strict_types=1);
+
+namespace Modules\Auth\Infrastructure\Adapter\Out\Persistence\EloquentModels;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Modules\Auth\Domain\ValueObjects\Email;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class UserModel extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -28,5 +31,16 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function toDomain(): \Modules\Auth\Domain\Entities\User
+    {
+        return new \Modules\Auth\Domain\Entities\User(
+            $this->id,
+            $this->name,
+            new Email($this->email),
+            $this->password,
+            ! is_null($this->email_verified_at),
+        );
     }
 }

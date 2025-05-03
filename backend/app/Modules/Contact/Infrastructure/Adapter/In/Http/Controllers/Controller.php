@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Contact\Infrastructure\Adapter\In\Http\Controllers;
+namespace Modules\Contact\Infrastructure\Adapter\In\Http\Controllers;
 
 abstract class Controller
 {

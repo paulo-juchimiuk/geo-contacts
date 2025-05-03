@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Modules\Contact\Domain\ValueObjects;
+namespace Modules\Contact\Domain\ValueObjects;
 
 use InvalidArgumentException;
 

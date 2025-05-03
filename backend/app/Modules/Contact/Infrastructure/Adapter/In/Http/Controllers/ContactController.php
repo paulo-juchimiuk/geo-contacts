@@ -32,7 +32,7 @@ readonly class ContactController
             longitude: $request->float('longitude'),
         );
 
-        return APIResponse::success(201, 'Contact created successfully', [
+        return APIResponse::success(201, 'ContactModel created successfully', [
             'id' => $contact->getId(),
             'name' => $contact->getName(),
             'cpf' => (string) $contact->getCpf(),

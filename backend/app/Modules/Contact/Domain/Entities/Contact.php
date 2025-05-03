@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Modules\Contact\Domain\Entities;
+namespace Modules\Contact\Domain\Entities;
 
-use App\Modules\Contact\Domain\ValueObjects\CPF;
+use Modules\Contact\Domain\ValueObjects\CPF;
 
 class Contact
 {

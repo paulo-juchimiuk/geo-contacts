@@ -30,10 +30,14 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
-            'guest' => \App\Modules\Auth\Infrastructure\Adapter\In\Http\Middleware\RedirectIfAuthenticated::class,
-            'verified' => \App\Modules\Auth\Infrastructure\Adapter\In\Http\Middleware\EnsureEmailIsVerified::class,
+            'guest' => \Modules\Auth\Infrastructure\Adapter\In\Http\Middleware\RedirectIfAuthenticated::class,
+            'verified' => \Modules\Auth\Infrastructure\Adapter\In\Http\Middleware\EnsureEmailIsVerified::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+    })
+    ->withProviders([
+        Modules\Auth\Infrastructure\Providers\AuthServiceProvider::class,
+        Modules\Contact\Infrastructure\Providers\ContactServiceProvider::class,
+    ])->create();

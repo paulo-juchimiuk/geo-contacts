@@ -6,7 +6,7 @@ namespace Tests\Unit\App\Domain\ValueObjects;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use App\Modules\Contact\Domain\ValueObjects\CPF;
+use Modules\Contact\Domain\ValueObjects\CPF;
 
 class CPFTest extends TestCase
 {

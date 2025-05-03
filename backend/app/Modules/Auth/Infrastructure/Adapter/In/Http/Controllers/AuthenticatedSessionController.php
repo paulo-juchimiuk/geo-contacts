@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Modules\Auth\Infrastructure\Adapter\In\Http\Controllers;
+namespace Modules\Auth\Infrastructure\Adapter\In\Http\Controllers;
 
-use App\Modules\Contact\Infrastructure\Adapter\In\Http\Controllers\Controller;
-use App\Modules\Auth\Infrastructure\Adapter\In\Http\Requests\LoginRequest;
+use Modules\Contact\Infrastructure\Adapter\In\Http\Controllers\Controller;
+use Modules\Auth\Infrastructure\Adapter\In\Http\Requests\LoginRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
+use Modules\Auth\Infrastructure\Adapter\Out\Persistence\EloquentModels\UserModel;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -20,7 +20,7 @@ class AuthenticatedSessionController extends Controller
             'password' => 'required|string',
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = UserModel::where('email', $request->email)->first();
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
             return response()->json([

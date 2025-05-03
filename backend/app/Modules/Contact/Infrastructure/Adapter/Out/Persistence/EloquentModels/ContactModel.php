@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Modules\Contact\Infrastructure\Adapter\Out\Persistence\EloquentModels;
+namespace Modules\Contact\Infrastructure\Adapter\Out\Persistence\EloquentModels;
 
 use Illuminate\Database\Eloquent\Model;
 

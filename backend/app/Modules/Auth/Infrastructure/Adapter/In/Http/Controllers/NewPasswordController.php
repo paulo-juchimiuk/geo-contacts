@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Modules\Auth\Infrastructure\Adapter\In\Http\Controllers;
+namespace Modules\Auth\Infrastructure\Adapter\In\Http\Controllers;
 
-use App\Modules\Contact\Infrastructure\Adapter\In\Http\Controllers\Controller;
+use Modules\Contact\Infrastructure\Adapter\In\Http\Controllers\Controller;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

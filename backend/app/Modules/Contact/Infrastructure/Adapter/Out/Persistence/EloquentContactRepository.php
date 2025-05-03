@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Modules\Contact\Infrastructure\Adapter\Out\Persistence;
+namespace Modules\Contact\Infrastructure\Adapter\Out\Persistence;
 
-use App\Modules\Contact\Domain\Entities\Contact;
-use App\Modules\Contact\Domain\Repositories\ContactRepositoryInterface;
-use App\Modules\Contact\Domain\ValueObjects\CPF;
-use App\Modules\Contact\Infrastructure\Adapter\Out\Persistence\EloquentModels\ContactModel;
+use Modules\Contact\Domain\Entities\Contact;
+use Modules\Contact\Domain\Repositories\ContactRepositoryInterface;
+use Modules\Contact\Domain\ValueObjects\CPF;
+use Modules\Contact\Infrastructure\Adapter\Out\Persistence\EloquentModels\ContactModel as ContactModel;
 
 class EloquentContactRepository implements ContactRepositoryInterface
 {

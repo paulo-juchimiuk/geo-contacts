@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Modules\Auth\Infrastructure\Adapter\In\Http\Controllers;
+namespace Modules\Auth\Infrastructure\Adapter\In\Http\Controllers;
 
-use App\Modules\Contact\Infrastructure\Adapter\In\Http\Controllers\Controller;
-use App\Models\User;
+use Modules\Contact\Infrastructure\Adapter\In\Http\Controllers\Controller;
+use Modules\Auth\Infrastructure\Adapter\Out\Persistence\EloquentModels\UserModel;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -23,11 +23,11 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.UserModel::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
+        $user = UserModel::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->string('password')),
@@ -39,7 +39,7 @@ class RegisteredUserController extends Controller
 
         return response()->json([
             'code' => 201,
-            'message' => 'User registered successfully',
+            'message' => 'UserModel registered successfully',
             'details' => [
                 'id' => $user->id,
                 'name' => $user->name,

@@ -24,7 +24,7 @@ readonly class CreateContactUseCase
         ?float $longitude = null
     ): Contact {
         if ($this->contactRepository->findByCpf($cpf, $userId)) {
-            throw new \DomainException('Contact with this CPF already exists.');
+            throw new \DomainException('ContactModel with this CPF already exists.');
         }
 
         $contact = new Contact(
