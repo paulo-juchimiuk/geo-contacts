@@ -31,4 +31,12 @@ class EloquentUserRepository implements UserRepositoryInterface
 
         return $model?->toDomain();
     }
+
+    public function createApiToken(DomainUser $user): string
+    {
+        /** @var UserModel $model */
+        $model = UserModel::findOrFail($user->id);
+
+        return $model->createToken('api')->plainTextToken;
+    }
 }

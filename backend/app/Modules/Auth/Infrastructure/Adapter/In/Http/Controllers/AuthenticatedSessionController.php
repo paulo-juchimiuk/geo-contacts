@@ -4,43 +4,35 @@ declare(strict_types=1);
 
 namespace Modules\Auth\Infrastructure\Adapter\In\Http\Controllers;
 
-use Modules\Contact\Infrastructure\Adapter\In\Http\Controllers\Controller;
-use Modules\Auth\Infrastructure\Adapter\In\Http\Requests\LoginRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Modules\Auth\Infrastructure\Adapter\Out\Persistence\EloquentModels\UserModel;
+use Illuminate\Validation\ValidationException;
+use Modules\Auth\Application\UseCases\LoginUserUseCase;
 
-class AuthenticatedSessionController extends Controller
+readonly class AuthenticatedSessionController
 {
-    public function store(LoginRequest $request): JsonResponse
+    public function __construct(private LoginUserUseCase $loginUser) {}
+
+    /**
+     * @throws ValidationException
+     */
+    public function store(Request $request): JsonResponse
     {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
+        $data = $request->validate([
+            'email'    => ['required','email'],
+            'password' => ['required','string'],
         ]);
 
-        $user = UserModel::where('email', $request->email)->first();
+        $payload = ($this->loginUser)($data['email'], $data['password']);
 
-        if (! $user || ! Hash::check($request->password, $user->password)) {
-            return response()->json([
-                'code' => 401,
-                'message' => 'Invalid credentials',
-                'details' => null,
-            ], 401);
+        if (! $payload) {
+            throw ValidationException::withMessages(['email' => __('auth.failed')]);
         }
 
-        $token = $user->createToken('api')->plainTextToken;
-
         return response()->json([
-            'code' => 200,
+            'code'    => 200,
             'message' => 'Login successful',
-            'details' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'token' => $token,
-            ],
+            'details' => $payload,
         ]);
     }
 
@@ -49,9 +41,9 @@ class AuthenticatedSessionController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'code' => 200,
+            'code'    => 204,
             'message' => 'Logout successful',
             'details' => null,
-        ]);
+        ], 204);
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
+use Modules\Auth\Infrastructure\Adapter\Out\Persistence\EloquentModels\UserModel;
 use Tests\TestCase;
 
 class PasswordResetTest extends TestCase
@@ -16,9 +16,11 @@ class PasswordResetTest extends TestCase
     {
         Notification::fake();
 
-        $user = User::factory()->create();
+        $user = UserModel::factory()->create();
 
-        $this->post('/forgot-password', ['email' => $user->email]);
+        $this->postJson('/api/forgot-password', ['email' => $user->email])
+            ->assertOk()
+            ->assertJson(['message' => 'Password reset link sent']);
 
         Notification::assertSentTo($user, ResetPassword::class);
     }
@@ -27,22 +29,21 @@ class PasswordResetTest extends TestCase
     {
         Notification::fake();
 
-        $user = User::factory()->create();
+        $user = UserModel::factory()->create();
 
-        $this->post('/forgot-password', ['email' => $user->email]);
+        $this->postJson('/api/forgot-password', ['email' => $user->email]);
 
-        Notification::assertSentTo($user, ResetPassword::class, function (object $notification) use ($user) {
-            $response = $this->post('/reset-password', [
-                'token' => $notification->token,
-                'email' => $user->email,
-                'password' => 'password',
+        Notification::assertSentTo($user, ResetPassword::class, function (ResetPassword $notification) use ($user) {
+            $this->postJson('/api/reset-password', [
+                'token'                 => $notification->token,
+                'email'                 => $user->email,
+                'password'              => 'password',
                 'password_confirmation' => 'password',
-            ]);
+            ])->assertOk();
 
-            $response
-                ->assertSessionHasNoErrors()
-                ->assertStatus(200);
-
+            $this->assertTrue(
+                password_verify('password', $user->fresh()->password)
+            );
             return true;
         });
     }

@@ -4,47 +4,30 @@ declare(strict_types=1);
 
 namespace Modules\Auth\Infrastructure\Adapter\In\Http\Controllers;
 
-use Modules\Contact\Infrastructure\Adapter\In\Http\Controllers\Controller;
-use Modules\Auth\Infrastructure\Adapter\Out\Persistence\EloquentModels\UserModel;
-use Illuminate\Auth\Events\Registered;
+use App\Modules\Auth\Application\UseCases\RegisterUserUseCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
-use Illuminate\Validation\ValidationException;
 
-class RegisteredUserController extends Controller
+readonly class RegisteredUserController
 {
-    /**
-     * @throws ValidationException
-     */
+    public function __construct(private RegisterUserUseCase $registerUser) {}
+
     public function store(Request $request): JsonResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.UserModel::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        $data = $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|string|email|max:255|unique:users,email',
+            'password' => 'required|confirmed|min:8',
         ]);
 
-        $user = UserModel::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->string('password')),
-        ]);
-
-        event(new Registered($user));
-
-        Auth::login($user);
+        $output = ($this->registerUser)(
+            $data['name'], $data['email'], $data['password']
+        );
 
         return response()->json([
-            'code' => 201,
-            'message' => 'UserModel registered successfully',
-            'details' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-            ]
+            'code'    => 201,
+            'message' => 'User registered successfully',
+            'details' => $output,
         ], 201);
     }
 }

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Modules\Contact\Infrastructure\Adapter\In\Http\Controllers;
+namespace Modules\Contact\Infrastructure\Adapter\In\Http\Controllers;
 
-use App\Modules\Contact\Application\UseCases\CreateContactUseCase;
-use App\Modules\Contact\Application\UseCases\ListContactsUseCase;
-use App\Modules\Contact\Infrastructure\Adapter\In\Http\Requests\ListContactsRequest;
-use App\Modules\Contact\Infrastructure\Adapter\In\Http\Requests\StoreContactRequest;
-use App\Modules\Contact\Infrastructure\Adapter\In\Http\Responses\APIResponse;
+use Modules\Contact\Application\UseCases\CreateContactUseCase;
+use Modules\Contact\Application\UseCases\ListContactsUseCase;
+use Modules\Contact\Infrastructure\Adapter\In\Http\Requests\ListContactsRequest;
+use Modules\Contact\Infrastructure\Adapter\In\Http\Requests\StoreContactRequest;
+use Modules\Contact\Infrastructure\Adapter\In\Http\Responses\APIResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 

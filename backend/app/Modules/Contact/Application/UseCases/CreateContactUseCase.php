@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Modules\Contact\Application\UseCases;
+namespace Modules\Contact\Application\UseCases;
 
-use App\Modules\Contact\Domain\Entities\Contact;
-use App\Modules\Contact\Domain\Repositories\ContactRepositoryInterface;
-use App\Modules\Contact\Domain\ValueObjects\CPF;
+use Modules\Contact\Domain\Entities\Contact;
+use Modules\Contact\Domain\Repositories\ContactRepositoryInterface;
+use Modules\Contact\Domain\ValueObjects\CPF;
 
 readonly class CreateContactUseCase
 {

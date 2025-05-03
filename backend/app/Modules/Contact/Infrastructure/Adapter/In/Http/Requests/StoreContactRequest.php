@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Modules\Contact\Infrastructure\Adapter\In\Http\Requests;
+namespace Modules\Contact\Infrastructure\Adapter\In\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 

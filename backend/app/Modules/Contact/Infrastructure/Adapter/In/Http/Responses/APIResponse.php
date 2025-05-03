@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Modules\Contact\Infrastructure\Adapter\In\Http\Responses;
+namespace Modules\Contact\Infrastructure\Adapter\In\Http\Responses;
 
 use Illuminate\Http\JsonResponse;
 

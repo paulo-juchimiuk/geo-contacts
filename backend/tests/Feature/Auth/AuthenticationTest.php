@@ -2,46 +2,50 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Modules\Auth\Infrastructure\Adapter\Out\Persistence\EloquentModels\UserModel;
 use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_users_can_authenticate_using_the_login_screen(): void
+    public function users_can_authenticate_via_api(): void
     {
-        $user = User::factory()->create();
+        $user = UserModel::factory()->create(['password' => bcrypt('password')]);
 
-        $response = $this->post('/login', [
-            'email' => $user->email,
+        $response = $this->postJson('/api/login', [
+            'email'    => $user->email,
             'password' => 'password',
-        ]);
+        ])->assertOk()
+            ->assertJsonStructure(['token']);
 
-        $this->assertAuthenticated();
-        $response->assertNoContent();
+        $this->assertDatabaseHas('personal_access_tokens', [
+            'tokenable_id' => $user->id,
+        ]);
     }
 
-    public function test_users_can_not_authenticate_with_invalid_password(): void
+    public function users_cannot_authenticate_with_invalid_password(): void
     {
-        $user = User::factory()->create();
+        $user = UserModel::factory()->create(['password' => bcrypt('password')]);
 
-        $this->post('/login', [
-            'email' => $user->email,
+        $this->postJson('/api/login', [
+            'email'    => $user->email,
             'password' => 'wrong-password',
-        ]);
-
-        $this->assertGuest();
+        ])->assertStatus(422);
     }
 
-    public function test_users_can_logout(): void
+    public function users_can_logout_via_api(): void
     {
-        $user = User::factory()->create();
+        $user  = UserModel::factory()->create();
+        $token = $user->createToken('api')->plainTextToken;
 
-        $response = $this->actingAs($user)->post('/logout');
+        $this->withHeader('Authorization', "Bearer {$token}")
+            ->postJson('/api/logout')
+            ->assertNoContent();
 
-        $this->assertGuest();
-        $response->assertNoContent();
+        $this->assertDatabaseMissing('personal_access_tokens', [
+            'tokenable_id' => $user->id,
+        ]);
     }
 }

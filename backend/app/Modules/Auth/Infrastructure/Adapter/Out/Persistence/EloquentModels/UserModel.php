@@ -8,11 +8,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Modules\Auth\Domain\ValueObjects\Email;
 use Illuminate\Notifications\Notifiable;
+use Database\Factories\UserModelFactory;
 use Laravel\Sanctum\HasApiTokens;
 
 class UserModel extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+    protected $table = 'users';
 
     protected $fillable = [
         'name',
@@ -31,6 +34,11 @@ class UserModel extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected static function newFactory(): UserModelFactory
+    {
+        return UserModelFactory::new();
     }
 
     public function toDomain(): \Modules\Auth\Domain\Entities\User
