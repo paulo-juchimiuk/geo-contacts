@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Contact\Domain\Repositories;
 
 use Modules\Contact\Domain\Entities\Contact;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface ContactRepositoryInterface
 {
@@ -12,5 +13,11 @@ interface ContactRepositoryInterface
     public function findById(int $id): ?Contact;
     public function findByCpf(string $cpf, int $userId): ?Contact;
     public function delete(Contact $contact): void;
-    public function search(int $userId, ?string $query = null): array;
+    public function paginate(
+        int $userId,
+        ?string $query = null,
+        string $sortBy = 'name',
+        string $dir = 'asc',
+        int $perPage = 10
+    ): LengthAwarePaginator;
 }

@@ -46,16 +46,19 @@ readonly class ContactController
         ]);
     }
 
-    public function index(ListContactsRequest $request, ListContactsUseCase $useCase): JsonResponse
+    public function index(ListContactsRequest $request, ListContactsUseCase $uc): JsonResponse
     {
         $user = Auth::user();
 
-        $contacts = $useCase->execute(
-            userId: $user->id,
-            query: $request->string('q')->toString()
+        $res  = $uc->execute(
+            userId   : $user->id,
+            query    : $request->string('q')->value(),
+            sortBy   : $request->string('sort', 'name')->value(),
+            dir      : $request->string('dir',  'asc')->value(),
+            perPage  : (int) $request->input('per_page', 10),
         );
 
-        return APIResponse::success(200, 'Contacts fetched successfully', $contacts);
+        return APIResponse::success(200, 'Contacts fetched', $res);
     }
 
     public function update(

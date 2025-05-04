@@ -6,11 +6,12 @@ namespace Tests\app\Modules\Contact\Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Modules\Auth\Infrastructure\Adapter\Out\Persistence\EloquentModels\UserModel;
+use Tests\helpers\ActsAsApi;
 use Tests\TestCase;
 
 class ContactCrudTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, ActsAsApi;
 
     private function actingAsApi(): array
     {

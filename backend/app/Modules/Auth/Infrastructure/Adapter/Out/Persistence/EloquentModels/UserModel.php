@@ -6,6 +6,7 @@ namespace Modules\Auth\Infrastructure\Adapter\Out\Persistence\EloquentModels;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Modules\Auth\Domain\Entities\User as DomainUser;
 use Modules\Auth\Domain\ValueObjects\Email;
 use Illuminate\Notifications\Notifiable;
 use Database\Factories\UserModelFactory;
@@ -41,9 +42,9 @@ class UserModel extends Authenticatable
         return UserModelFactory::new();
     }
 
-    public function toDomain(): \Modules\Auth\Domain\Entities\User
+    public function toDomain(): DomainUser
     {
-        return new \Modules\Auth\Domain\Entities\User(
+        return new DomainUser(
             $this->id,
             $this->name,
             new Email($this->email),
