@@ -1,35 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from 'react';
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+import axios from 'axios';
+
+type Contact = {
+    id: number;
+    name: string;
+    latitude: number;
+    longitude: number;
+};
+
+const containerStyle = {
+    width: '100%',
+    height: '100vh',
+};
+
+const center = {
+    lat: -14.2350,
+    lng: -51.9253,
+};
 
 function App() {
-  const [count, setCount] = useState(0)
+    const { isLoaded } = useJsApiLoader({
+        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string,
+    });
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    const [contacts, setContacts] = useState<Contact[]>([]);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+
+        axios
+            .get('http://localhost/api/contacts', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((res) => {
+                setContacts(res.data.details.data);
+            })
+            .catch((err) => {
+                console.error("Erro ao buscar contatos:", err);
+            });
+    }, []);
+
+    if (!isLoaded) return <div>Carregando mapa...</div>;
+
+    return (
+        <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={center}
+            zoom={4}
+        >
+            {contacts.map((contact) => (
+                <Marker
+                    key={contact.id}
+                    position={{ lat: contact.latitude, lng: contact.longitude }}
+                    onClick={() => alert(`Contato: ${contact.name}`)}
+                />
+            ))}
+        </GoogleMap>
+    );
 }
 
-export default App
+export default App;
