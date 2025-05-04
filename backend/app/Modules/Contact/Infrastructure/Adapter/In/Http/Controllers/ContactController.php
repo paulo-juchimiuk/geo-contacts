@@ -26,13 +26,13 @@ readonly class ContactController
         $user = Auth::user();
 
         $contact = $this->createContactUseCase->execute(
-            userId: $user->id,
-            name: $request->string('name')->toString(),
-            cpf: $request->string('cpf')->toString(),
-            phone: $request->string('phone')->toString(),
-            address: $request->string('address')->toString(),
-            latitude: $request->float('latitude'),
-            longitude: $request->float('longitude'),
+            $user->id,
+            $request->string('name')->toString(),
+            $request->string('cpf')->toString(),
+            $request->string('phone')->toString(),
+            $request->string('address')->toString(),
+            $request->float('latitude'),
+            $request->float('longitude'),
         );
 
         return APIResponse::success(201, 'ContactModel created successfully', [
@@ -50,12 +50,12 @@ readonly class ContactController
     {
         $user = Auth::user();
 
-        $res  = $uc->execute(
-            userId   : $user->id,
-            query    : $request->string('q')->value(),
-            sortBy   : $request->string('sort', 'name')->value(),
-            dir      : $request->string('dir',  'asc')->value(),
-            perPage  : (int) $request->input('per_page', 10),
+        $res = $uc->execute(
+            $user->id,
+            $request->string('q')->value(),
+            $request->string('sort', 'name')->value(),
+            $request->string('dir', 'asc')->value(),
+            (int) $request->input('per_page', 10),
         );
 
         return APIResponse::success(200, 'Contacts fetched', $res);
@@ -69,24 +69,24 @@ readonly class ContactController
         $user = Auth::user();
 
         $payload = $useCase->execute(
-            contactId : $contact,
-            userId    : $user->id,
-            name      : $request->input('name'),
-            cpf       : $request->input('cpf'),
-            phone     : $request->input('phone'),
-            address   : $request->input('address'),
-            latitude  : $request->input('latitude'),
-            longitude : $request->input('longitude'),
+            $contact,
+            $user->id,
+            $request->input('name'),
+            $request->input('cpf'),
+            $request->input('phone'),
+            $request->input('address'),
+            $request->input('latitude'),
+            $request->input('longitude'),
         );
 
         return APIResponse::success(200, 'Contact updated', [
-            'id'       => $payload->getId(),
-            'name'     => $payload->getName(),
-            'cpf'      => (string)$payload->getCpf(),
-            'phone'    => $payload->getPhone(),
-            'address'  => $payload->getAddress(),
+            'id' => $payload->getId(),
+            'name' => $payload->getName(),
+            'cpf' => (string) $payload->getCpf(),
+            'phone' => $payload->getPhone(),
+            'address' => $payload->getAddress(),
             'latitude' => $payload->getLatitude(),
-            'longitude'=> $payload->getLongitude(),
+            'longitude' => $payload->getLongitude(),
         ]);
     }
 

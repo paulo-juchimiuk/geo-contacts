@@ -7,11 +7,13 @@ namespace Modules\Contact\Application\UseCases;
 use Modules\Contact\Domain\Entities\Contact as DomainContact;
 use Modules\Contact\Domain\Repositories\ContactRepositoryInterface;
 use Modules\Contact\Domain\ValueObjects\CPF;
+use Modules\Shared\Domain\Services\GoogleGeocodeGatewayInterface;
 
 readonly class CreateContactUseCase
 {
     public function __construct(
-        private ContactRepositoryInterface $contactRepository
+        private ContactRepositoryInterface $contactRepository,
+        private GoogleGeocodeGatewayInterface $geocodeGateway
     ) {}
 
     public function execute(
@@ -27,6 +29,12 @@ readonly class CreateContactUseCase
             throw new \DomainException('ContactModel with this CPF already exists.');
         }
 
+        if ($latitude === null || $longitude === null) {
+            $location = $this->geocodeGateway->geocode($address);
+            $latitude = $location['lat'];
+            $longitude = $location['lng'];
+        }
+
         $contact = new DomainContact(
             id: null,
             userId: $userId,
@@ -35,7 +43,7 @@ readonly class CreateContactUseCase
             phone: $phone,
             address: $address,
             latitude: $latitude,
-            longitude: $longitude,
+            longitude: $longitude
         );
 
         return $this->contactRepository->save($contact);
