@@ -28,6 +28,15 @@ return [
         'key' => env('RESEND_KEY'),
     ],
 
+    'viacep' => [
+        'url' => env('VIA_CEP_URL', 'https://viacep.com.br/ws'),
+    ],
+
+    'google' => [
+        'url' => env('GOOGLE_GEOCODE_URL', 'https://maps.googleapis.com/maps/api/geocode/json'),
+        'key' => env('GOOGLE_API_KEY'),
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
