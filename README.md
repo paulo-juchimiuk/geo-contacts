@@ -1,34 +1,49 @@
 # GeoContacts
 
-Sistema full-stack de gerenciamento de contatos. (UEX)
+Sistema full-stack de gerenciamento de contatos, com foco em arquitetura limpa, testes e integração contínua.
 
-## Tecnologias Utilizadas
-- **Backend:** Laravel 12 (PHP 8.3) + Sanctum
-- **Frontend:** React 18 + TypeScript + Vite
-- **Infraestrutura:** Docker Compose (Nginx, PHP-FPM, MySQL, Node.js)
-- **CI/CD:** GitHub Actions
-- **Outros:** Google Maps API, ViaCEP API
+## 🛠️ Tecnologias Utilizadas
 
-## Como rodar o projeto
+* **Backend:** Laravel 12 (PHP 8.3) com Laravel Sanctum para autenticação via tokens.
+* **Frontend:** React 18 + TypeScript, utilizando Vite para bundling.
+* **Arquitetura:** Clean Architecture / Hexagonal, aplicando princípios SOLID e TDD.
+* **Infraestrutura:** Docker Compose (Nginx, PHP-FPM, MySQL, Node.js).
+* **CI/CD:** GitHub Actions.
+* **Serviços Externos:** Google Maps API para geolocalização e ViaCEP para busca de endereços.
+
+## 🚀 Como Rodar o Projeto
 
 ### Pré-requisitos
-- Docker
-- Docker Compose
-- Make
 
-### Subir o ambiente
+* Docker
+* Docker Compose
+
+### Subir o Ambiente
+
 ```bash
-make up
+docker compose up -d --build
 ```
 
-## Acessar
+O projeto será acessível em:
 
-- **Backend API:** http://localhost:8000
+* **Backend API:** [http://localhost:8000](http://localhost:8000)
+* **Frontend App:** [http://localhost:5173](http://localhost:5173)
 
-- **Frontend App:** http://localhost:5173
+> O `entrypoint` já está configurado para instalar dependências, rodar migrations e seeders automaticamente.
 
+### Rodar Testes
 
-## Estrutura de Pastas
+```bash
+docker exec -it --user app geo-contacts-app sh
+php artisan test
+```
+
+## 🔪 Cobertura de Testes
+
+* Testes unitários e de integração cobrindo autenticação, CRUD de contatos, serviços externos e exclusão de conta.
+* Cobertura atual: 70%.
+
+## 📁 Estrutura de Pastas
 
 ```bash
 geo-contacts/
@@ -37,14 +52,69 @@ geo-contacts/
 ├── docker/    # Configurações Docker
 ├── .github/   # Workflows de CI
 ├── docker-compose.yml
-├── Makefile
 └── README.md
 ```
 
-## Funcionalidades (em desenvolvimento)
-- [x] Docker + Estrutura inicial
-- [ ] Autenticação de usuários
-- [ ] CRUD de Contatos
-- [ ] Integração ViaCEP
-- [ ] Geolocalização com Google Maps
-- [ ] Exclusão de Conta
+## 🛋️ Arquitetura
+
+Adotamos **Arquitetura Hexagonal (Ports & Adapters)**:
+
+* **Domain:** Entidades e Value Objects puros.
+* **Application:** Casos de uso (UseCases) que orquestram a lógica de negócios.
+* **Infrastructure:**
+
+    * **Adapter In:** Controllers HTTP, Requests e Middlewares.
+    * **Adapter Out:** Repositórios Eloquent e serviços externos (Google Maps, ViaCEP).
+
+> Essa abordagem facilita testes, manutenção e escalabilidade.
+
+## 🔐 Autenticação
+
+* **Laravel Sanctum** para autenticação via tokens simples para SPAs e APIs.
+* Registro, login, proteção de rotas, logout e exclusão de conta.
+
+## 🌐 Serviços Externos
+
+* **ViaCEP:** Busca de endereços a partir do CEP informado.
+* **Google Maps API:** Geocodificação para obter latitude e longitude de endereços.
+
+> Configure `GOOGLE_KEY` no `.env` para utilizar a API do Google.
+
+## 📄 Documentação da API (Postman)
+
+Importe a collection no Postman:
+
+* **Collection:** `collection.json`
+* **Visualização da Documentação:** [http://localhost:8000/api-doc/collection.json](http://localhost:8000/api-doc/collection.json)
+
+## 📆 Endpoints Principais
+
+### Autenticação
+
+* `POST /api/register` → Registro
+* `POST /api/login` → Login
+* `POST /api/logout` → Logout
+* `DELETE /api/account` → Exclusão de conta
+
+### Contatos
+
+* `GET /api/contacts` → Listar contatos
+* `POST /api/contacts` → Criar contato
+* `PUT /api/contacts/{id}` → Atualizar contato
+* `DELETE /api/contacts/{id}` → Deletar contato
+
+### Serviços Externos
+
+* `GET /api/cep/{cep}` → Buscar endereço pelo CEP
+
+## 📂 Variáveis de Ambiente
+
+Copie `.env.example` para `.env` e configure:
+
+```env
+APP_NAME=GeoContacts
+APP_URL=http://localhost:8000
+GOOGLE_KEY=your_google_maps_api_key
+```
+
+---

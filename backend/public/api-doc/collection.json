@@ -1,0 +1,109 @@
+{
+    "info": {
+        "name": "GeoContacts API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Register",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {"key": "Content-Type", "value": "application/json"}
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"Test User\",\"email\":\"test@example.com\",\"password\":\"secret\"}"
+                        },
+                        "url": {"raw": "http://localhost:8000/api/register"}
+                    }
+                },
+                {
+                    "name": "Login",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {"key": "Content-Type", "value": "application/json"}
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"email\":\"test@example.com\",\"password\":\"secret\"}"
+                        },
+                        "url": {"raw": "http://localhost:8000/api/login"}
+                    }
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+                        "url": {"raw": "http://localhost:8000/api/logout"}
+                    }
+                },
+                {
+                    "name": "Delete Account",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+                        "url": {"raw": "http://localhost:8000/api/account"}
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Contacts",
+            "item": [
+                {
+                    "name": "Create Contact",
+                    "request": {
+                        "method": "POST",
+                        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}, {"key": "Content-Type", "value": "application/json"}],
+                        "body": {"mode": "raw", "raw": "{\"name\":\"John Doe\",\"cpf\":\"39053344705\",\"phone\":\"11999999999\",\"address\":\"Rua A\"}"},
+                        "url": {"raw": "http://localhost:8000/api/contacts"}
+                    }
+                },
+                {
+                    "name": "List Contacts",
+                    "request": {
+                        "method": "GET",
+                        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+                        "url": {"raw": "http://localhost:8000/api/contacts"}
+                    }
+                },
+                {
+                    "name": "Update Contact",
+                    "request": {
+                        "method": "PUT",
+                        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}, {"key": "Content-Type", "value": "application/json"}],
+                        "body": {"mode": "raw", "raw": "{\"phone\":\"11988887777\"}"},
+                        "url": {"raw": "http://localhost:8000/api/contacts/{{contact_id}}"}
+                    }
+                },
+                {
+                    "name": "Delete Contact",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+                        "url": {"raw": "http://localhost:8000/api/contacts/{{contact_id}}"}
+                    }
+                }
+            ]
+        },
+        {
+            "name": "ViaCep",
+            "item": [
+                {
+                    "name": "Lookup CEP",
+                    "request": {
+                        "method": "GET",
+                        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+                        "url": {"raw": "http://localhost:8000/api/cep/01001000"}
+                    }
+                }
+            ]
+        }
+    ]
+}
