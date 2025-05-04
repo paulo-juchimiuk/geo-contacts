@@ -13,4 +13,5 @@ interface UserRepositoryInterface
     public function findByEmail(Email $email): ?User;
     public function createApiToken(User $user): string;
     public function revokeCurrentToken(User $user): void;
+    public function delete(User $user): void;
 }

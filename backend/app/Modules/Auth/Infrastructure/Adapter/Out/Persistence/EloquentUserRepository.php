@@ -15,11 +15,11 @@ class EloquentUserRepository implements UserRepositoryInterface
     public function save(DomainUser $user): DomainUser
     {
         $model = UserModel::updateOrCreate(
-            ['id' => $user->id],
+            ['id' => $user->getId()],
             [
-                'name'     => $user->name,
-                'email'    => $user->email->value(),
-                'password' => $user->passwordHash,
+                'name'     => $user->getName(),
+                'email'    => $user->getEmail()->value(),
+                'password' => $user->getPasswordHash(),
             ],
         );
 
@@ -36,13 +36,23 @@ class EloquentUserRepository implements UserRepositoryInterface
     public function createApiToken(DomainUser $user): string
     {
         /** @var UserModel $model */
-        $model = UserModel::findOrFail($user->id);
+        $model = UserModel::findOrFail($user->getId());
 
         return $model->createToken('api')->plainTextToken;
     }
 
     public function revokeCurrentToken(DomainUser $user): void
     {
-        PersonalAccessToken::where('tokenable_id', $user->id)->delete();
+        PersonalAccessToken::where('tokenable_id', $user->getId())->delete();
+    }
+
+    public function delete(DomainUser $user): void
+    {
+        /** @var UserModel $model */
+        $model = UserModel::findOrFail($user->getId());
+
+        PersonalAccessToken::where('tokenable_id', $user->getId())->delete();
+
+        $model->delete();
     }
 }

@@ -7,12 +7,12 @@ namespace Modules\Auth\Application\UseCases;
 use Modules\Auth\Domain\Entities\User as DomainUser;
 use Modules\Auth\Domain\Repositories\UserRepositoryInterface;
 
-readonly class LogoutUserUseCase
+readonly class DeleteAccountUseCase
 {
     public function __construct(private UserRepositoryInterface $usersRepository) {}
 
     public function __invoke(DomainUser $user): void
     {
-        $this->usersRepository->revokeCurrentToken($user);
+        $this->usersRepository->delete($user);
     }
 }

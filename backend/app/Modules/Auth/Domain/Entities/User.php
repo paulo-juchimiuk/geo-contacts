@@ -9,12 +9,17 @@ use Modules\Auth\Domain\ValueObjects\Email;
 class User
 {
     public function __construct(
-        public readonly ?int $id,
-        public string $name,
-        public Email $email,
-        public string $passwordHash,
-        public bool $emailVerified = false,
+        private readonly ?int $id,
+        private string $name,
+        private Email $email,
+        private string $passwordHash,
+        private bool $emailVerified = false,
     ) {}
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function getName(): string
     {

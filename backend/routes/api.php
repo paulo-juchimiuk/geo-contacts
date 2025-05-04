@@ -9,14 +9,16 @@ use Modules\Auth\Infrastructure\Adapter\In\Http\Controllers\{
     PasswordResetLinkController,
     NewPasswordController,
     EmailVerificationNotificationController,
-    VerifyEmailController
+    VerifyEmailController,
+    AccountController
 };
 
 /* ---------- AUTH (API) ---------- */
 
 Route::post('/login',    [AuthenticatedSessionController::class, 'store'])->name('login');
-Route::post('/register', [RegisteredUserController::class,      'store'])->name('register');
-
+Route::post('/register', [RegisteredUserController::class, 'store'])->name('register');
+Route::delete('/account', [AccountController::class, 'destroy'])
+    ->name('account.destroy');
 Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
     ->name('password.email');
 
@@ -25,13 +27,21 @@ Route::post('/reset-password',  [NewPasswordController::class, 'store'])
 
 /* Rotas que exigem token Sanctum */
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+    /* ---------- AUTH ---------- */
+    Route::post('/logout',   [AuthenticatedSessionController::class, 'destroy'])
+        ->name('logout');
+
+    Route::delete('/account', [AccountController::class, 'destroy'])
+        ->name('account.destroy');
 
     Route::post('/email/verification-notification',
-        [EmailVerificationNotificationController::class, 'store'])->name('verification.send');
+        [EmailVerificationNotificationController::class, 'store'])
+        ->name('verification.send');
 
     Route::get('/verify-email/{id}/{hash}',
-        VerifyEmailController::class)->name('verification.verify');
+        VerifyEmailController::class)
+        ->name('verification.verify');
 
     /* ---------- CONTACT ---------- */
     Route::post('/contacts', [ContactController::class, 'store']);
