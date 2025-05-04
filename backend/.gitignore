@@ -22,3 +22,6 @@ yarn-error.log
 /.vscode
 /.zed
 .idea/
+# Impedir migrations publishadas acidentais (padrão vendor:publish)
+/database/migrations/*_create_personal_access_tokens_table.php
+!/database/migrations/2025_04_29_195856_create_personal_access_tokens_table.php
