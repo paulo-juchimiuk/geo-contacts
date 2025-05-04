@@ -7,11 +7,14 @@ namespace Modules\Auth\Infrastructure\Adapter\In\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use Modules\Auth\Application\UseCases\LoginUserUseCase;
+use Modules\Auth\Application\UseCases\{LoginUserUseCase, LogoutUserUseCase};
 
 readonly class AuthenticatedSessionController
 {
-    public function __construct(private LoginUserUseCase $loginUser) {}
+    public function __construct(
+        private LoginUserUseCase $loginUser,
+        private LogoutUserUseCase $logoutUser
+    ) {}
 
     /**
      * @throws ValidationException
@@ -38,7 +41,7 @@ readonly class AuthenticatedSessionController
 
     public function destroy(Request $request): JsonResponse
     {
-        $request->user()->currentAccessToken()->delete();
+        ($this->logoutUser)($request->user()->toDomain());
 
         return response()->json([
             'code'    => 204,

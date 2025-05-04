@@ -29,7 +29,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Tests\\": "tests/",
+            "Modules\\Auth\\Tests\\": "tests/app/Modules/Auth/Tests/",
+            "Modules\\Contact\\Tests\\": "tests/app/Modules/Contact/Tests/"
         }
     },
     "scripts": {

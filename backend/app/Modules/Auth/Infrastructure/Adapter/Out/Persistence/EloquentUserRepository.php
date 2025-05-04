@@ -8,6 +8,7 @@ use Modules\Auth\Domain\Entities\User as DomainUser;
 use Modules\Auth\Domain\Repositories\UserRepositoryInterface;
 use Modules\Auth\Domain\ValueObjects\Email;
 use Modules\Auth\Infrastructure\Adapter\Out\Persistence\EloquentModels\UserModel;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class EloquentUserRepository implements UserRepositoryInterface
 {
@@ -38,5 +39,10 @@ class EloquentUserRepository implements UserRepositoryInterface
         $model = UserModel::findOrFail($user->id);
 
         return $model->createToken('api')->plainTextToken;
+    }
+
+    public function revokeCurrentToken(DomainUser $user): void
+    {
+        PersonalAccessToken::where('tokenable_id', $user->id)->delete();
     }
 }

@@ -12,4 +12,5 @@ interface UserRepositoryInterface
     public function save(User $user): User;
     public function findByEmail(Email $email): ?User;
     public function createApiToken(User $user): string;
+    public function revokeCurrentToken(User $user): void;
 }
