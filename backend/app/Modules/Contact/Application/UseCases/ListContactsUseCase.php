@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\Contact\Application\UseCases;
 
-use Modules\Contact\Domain\Entities\Contact;
 use Modules\Contact\Domain\Repositories\ContactRepositoryInterface;
 
 readonly class ListContactsUseCase
@@ -13,9 +12,6 @@ readonly class ListContactsUseCase
         private ContactRepositoryInterface $contactRepository
     ) {}
 
-    /**
-     * @return Contact[]
-     */
     public function execute(int $userId, ?string $query = null): array
     {
         return $this->contactRepository->search($userId, $query);

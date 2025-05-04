@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Contact\Application\UseCases;
 
-use Modules\Contact\Domain\Entities\Contact;
+use Modules\Contact\Domain\Entities\Contact as DomainContact;
 use Modules\Contact\Domain\Repositories\ContactRepositoryInterface;
 use Modules\Contact\Domain\ValueObjects\CPF;
 
@@ -22,12 +22,12 @@ readonly class CreateContactUseCase
         string $address,
         ?float $latitude = null,
         ?float $longitude = null
-    ): Contact {
+    ): DomainContact {
         if ($this->contactRepository->findByCpf($cpf, $userId)) {
             throw new \DomainException('ContactModel with this CPF already exists.');
         }
 
-        $contact = new Contact(
+        $contact = new DomainContact(
             id: null,
             userId: $userId,
             name: $name,

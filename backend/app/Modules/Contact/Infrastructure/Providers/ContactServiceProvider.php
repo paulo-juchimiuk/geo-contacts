@@ -10,12 +10,8 @@ use Modules\Contact\Infrastructure\Adapter\Out\Persistence\EloquentContactReposi
 
 final class ContactServiceProvider extends ServiceProvider
 {
-    /**
-     * Registra ligações interface → implementação.
-     */
     public function register(): void
     {
-        // Porta do domínio ContactModel ⇢ adaptador Eloquent
         $this->app->bind(
             ContactRepositoryInterface::class,
             EloquentContactRepository::class

@@ -44,8 +44,8 @@ Route::middleware('auth:sanctum')->group(function () {
         ->name('verification.verify');
 
     /* ---------- CONTACT ---------- */
-    Route::post('/contacts', [ContactController::class, 'store']);
-    Route::get('/contacts',  [ContactController::class, 'index']);
+    Route::apiResource('contacts', ContactController::class)
+        ->only(['store','index','update','destroy']);
 
     /* ---------- USER (debug) ---------- */
     Route::get('/user', fn (Request $request) => $request->user());
