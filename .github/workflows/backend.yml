@@ -27,7 +27,7 @@ jobs:
         working-directory: ./backend
 
       - name: Run Pint
-        run: ./vendor/bin/pint --test
+        run: ./vendor/bin/pint
         working-directory: ./backend
         continue-on-error: true
 

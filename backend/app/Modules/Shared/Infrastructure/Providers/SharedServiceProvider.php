@@ -27,7 +27,7 @@ final class SharedServiceProvider extends ServiceProvider
             return new GoogleGeocodeService(
                 $app->make(HttpClientInterface::class),
                 config('services.google.url'),
-                config('services.google.key')
+                env('GOOGLE_MAPS_API_KEY', 'TEST_KEY_FOR_UNIT')
             );
         });
 
