@@ -2,7 +2,7 @@
 
 Sistema full-stack de gerenciamento de contatos, com foco em arquitetura limpa, testes e integração contínua.
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 * **Backend:** Laravel 12 (PHP 8.3) com Laravel Sanctum para autenticação via tokens.
 * **Frontend:** React 18 + TypeScript, utilizando Vite para bundling.
@@ -11,7 +11,7 @@ Sistema full-stack de gerenciamento de contatos, com foco em arquitetura limpa, 
 * **CI/CD:** GitHub Actions.
 * **Serviços Externos:** Google Maps API para geolocalização e ViaCEP para busca de endereços.
 
-## 🚀 Como Rodar o Projeto
+## Como Rodar o Projeto
 
 ### Pré-requisitos
 
@@ -38,12 +38,12 @@ docker exec -it --user app geo-contacts-app sh
 php artisan test
 ```
 
-## 🔪 Cobertura de Testes
+## Cobertura de Testes
 
 * Testes unitários e de integração cobrindo autenticação, CRUD de contatos, serviços externos e exclusão de conta.
 * Cobertura atual: 70%.
 
-## 📁 Estrutura de Pastas
+## Estrutura de Pastas
 
 ```bash
 geo-contacts/
@@ -55,7 +55,7 @@ geo-contacts/
 └── README.md
 ```
 
-## 🛋️ Arquitetura
+## Arquitetura
 
 Adotamos **Arquitetura Hexagonal (Ports & Adapters)**:
 
@@ -68,19 +68,19 @@ Adotamos **Arquitetura Hexagonal (Ports & Adapters)**:
 
 > Essa abordagem facilita testes, manutenção e escalabilidade.
 
-## 🔐 Autenticação
+## Autenticação
 
 * **Laravel Sanctum** para autenticação via tokens simples para SPAs e APIs.
 * Registro, login, proteção de rotas, logout e exclusão de conta.
 
-## 🌐 Serviços Externos
+## Serviços Externos
 
 * **ViaCEP:** Busca de endereços a partir do CEP informado.
 * **Google Maps API:** Geocodificação para obter latitude e longitude de endereços.
 
 > Configure `GOOGLE_KEY` no `.env` para utilizar a API do Google.
 
-## ✅ Integração Contínua (CI)
+## Integração Contínua (CI)
 
 Este projeto já possui **GitHub Actions** configurado para validar:
 
@@ -94,14 +94,14 @@ Exemplo de validação automática:
 ✔ Pint - Passed
 ✔ PHPUnit - Passed (24 tests, 75 assertions)
 
-## 📄 Documentação da API (Postman)
+## Documentação da API (Postman)
 
 Importe a collection no Postman:
 
 * **Collection:** `collection.json`
 * **Visualização da Documentação:** [http://localhost:8000/api-doc/collection.json](http://localhost:8000/api-doc/collection.json)
 
-## 📆 Endpoints Principais
+## Endpoints Principais
 
 ### Autenticação
 
@@ -121,7 +121,7 @@ Importe a collection no Postman:
 
 * `GET /api/cep/{cep}` → Buscar endereço pelo CEP
 
-## 📂 Variáveis de Ambiente
+## Variáveis de Ambiente
 
 Copie `.env.example` para `.env` e configure:
 
