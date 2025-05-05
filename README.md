@@ -80,6 +80,20 @@ Adotamos **Arquitetura Hexagonal (Ports & Adapters)**:
 
 > Configure `GOOGLE_KEY` no `.env` para utilizar a API do Google.
 
+## ✅ Integração Contínua (CI)
+
+Este projeto já possui **GitHub Actions** configurado para validar:
+
+- **Backend:** Composer validate, Pint (code style) e PHPUnit
+- **Frontend:** Build e verificação do React com Vite
+
+A pipeline é disparada automaticamente em cada `push` e `pull request` para a branch `main`, garantindo a estabilidade e qualidade do projeto.
+
+Exemplo de validação automática:
+
+✔ Pint - Passed
+✔ PHPUnit - Passed (24 tests, 75 assertions)
+
 ## 📄 Documentação da API (Postman)
 
 Importe a collection no Postman:
