@@ -12,13 +12,22 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_authenticate_via_api(): void
     {
-        $user = UserModel::factory()->create(['password' => bcrypt('password')]);
+        $user = UserModel::factory()->create();
 
         $response = $this->postJson('/api/login', [
             'email'    => $user->email,
             'password' => 'password',
         ])->assertOk()
-            ->assertJsonStructure(['token']);
+            ->assertJsonStructure([
+                'code',
+                'message',
+                'details' => [
+                    'id',
+                    'name',
+                    'email',
+                    'token',
+                ],
+            ]);
 
         $this->assertDatabaseHas('personal_access_tokens', [
             'tokenable_id' => $user->id,
@@ -27,7 +36,7 @@ class AuthenticationTest extends TestCase
 
     public function test_users_cannot_authenticate_with_invalid_password(): void
     {
-        $user = UserModel::factory()->create(['password' => bcrypt('password')]);
+        $user = UserModel::factory()->create();
 
         $this->postJson('/api/login', [
             'email'    => $user->email,

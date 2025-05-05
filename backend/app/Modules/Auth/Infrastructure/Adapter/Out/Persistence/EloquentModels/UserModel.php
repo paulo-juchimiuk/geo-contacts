@@ -22,6 +22,7 @@ class UserModel extends Authenticatable
         'name',
         'email',
         'password',
+        'email_verified_at',
     ];
 
     protected $hidden = [
@@ -49,7 +50,7 @@ class UserModel extends Authenticatable
             $this->name,
             new Email($this->email),
             $this->password,
-            ! is_null($this->email_verified_at),
+            true
         );
     }
 }
