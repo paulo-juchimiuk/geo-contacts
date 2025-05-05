@@ -10,7 +10,7 @@ class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function users_can_authenticate_via_api(): void
+    public function test_users_can_authenticate_via_api(): void
     {
         $user = UserModel::factory()->create(['password' => bcrypt('password')]);
 
@@ -25,7 +25,7 @@ class AuthenticationTest extends TestCase
         ]);
     }
 
-    public function users_cannot_authenticate_with_invalid_password(): void
+    public function test_users_cannot_authenticate_with_invalid_password(): void
     {
         $user = UserModel::factory()->create(['password' => bcrypt('password')]);
 
@@ -35,7 +35,7 @@ class AuthenticationTest extends TestCase
         ])->assertStatus(422);
     }
 
-    public function users_can_logout_via_api(): void
+    public function test_users_can_logout_via_api(): void
     {
         $user  = UserModel::factory()->create();
         $token = $user->createToken('api')->plainTextToken;
